@@ -1,6 +1,6 @@
 [package]
 name = "matchable"
-version = "0.0.0"
+version = "0.1.0"
 authors = ["Pig Fang <g-plane@hotmail.com>"]
 description = "Check if text is matching against string or regex in one API."
 repository = "https://github.com/g-plane/matchable"
