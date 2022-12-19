@@ -1,0 +1,18 @@
+[package]
+name = "matchable"
+version = "0.0.0"
+authors = ["Pig Fang <g-plane@hotmail.com>"]
+description = "Check if text is matching against string or regex in one API."
+repository = "https://github.com/g-plane/matchable"
+edition = "2021"
+license = "MIT"
+
+[dependencies]
+regex = "1.7"
+serde = { version = "1.0", optional = true }
+
+[dev-dependencies]
+serde_json = "1.0"
+
+[features]
+serde = ["dep:serde"]
