@@ -50,13 +50,18 @@
 
 extern crate alloc;
 
-use alloc::{borrow::ToOwned, string::String};
+#[cfg(feature = "serde")]
+use alloc::borrow::ToOwned;
+use alloc::string::String;
+#[cfg(feature = "serde")]
+use core::fmt;
 use core::{
-    fmt,
     hash::{Hash, Hasher},
     ops::Deref,
 };
-use regex::{Regex, RegexBuilder};
+use regex::Regex;
+#[cfg(feature = "serde")]
+use regex::RegexBuilder;
 #[cfg(feature = "serde")]
 use serde::{
     de::{Error, Unexpected, Visitor},
@@ -238,10 +243,12 @@ impl<'de> Visitor<'de> for RegexOnlyVisitor {
     }
 }
 
+#[cfg(feature = "serde")]
 fn extract_regex(s: &str) -> Option<(&str, &str)> {
     s.strip_prefix('/').and_then(|s| s.rsplit_once('/'))
 }
 
+#[cfg(feature = "serde")]
 fn build_regex(regex: &str, flags: &str) -> Result<Regex, regex::Error> {
     let mut builder = RegexBuilder::new(regex);
     builder.case_insensitive(flags.contains('i'));
