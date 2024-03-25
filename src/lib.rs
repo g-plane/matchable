@@ -68,6 +68,7 @@ use serde::{
     Deserialize, Deserializer,
 };
 
+#[derive(Clone, Debug)]
 /// `Matchable` is a wrapper for a plain string or a regex, and it's used to check matching.
 ///
 /// When checking if a text is matching or not,
@@ -78,13 +79,13 @@ use serde::{
 /// if the value starts with a slash `/`, and it ends with a slash `/` with optional regex flags,
 /// like `"/abcd/"` or `"/abcd/i"`, it will be deserialized as a regex;
 /// otherwise, it will be deserialized as a plain string.
-#[derive(Clone, Debug)]
 pub enum Matchable {
     Str(String),
     Regex(Regex),
 }
 
 impl Matchable {
+    #[inline]
     /// Check whether a piece of text matches the [`Matchable`] or not.
     ///
     /// ```
@@ -99,7 +100,6 @@ impl Matchable {
     ///     .unwrap();
     /// assert!(Matchable::Regex(re).is_match("abc"));
     /// ```
-    #[inline]
     pub fn is_match(&self, text: impl AsRef<str>) -> bool {
         let text = text.as_ref();
         match self {
@@ -108,8 +108,8 @@ impl Matchable {
         }
     }
 
-    /// Return the string representation of the [`Matchable`].
     #[inline]
+    /// Return the string representation of the [`Matchable`].
     pub fn as_str(&self) -> &str {
         match self {
             Self::Str(str) => str,
@@ -155,8 +155,8 @@ impl<'de> Deserialize<'de> for Matchable {
     }
 }
 
-/// Serde visitor for parsing string as the [`Matchable`] type.
 #[cfg(feature = "serde")]
+/// Serde visitor for parsing string as the [`Matchable`] type.
 struct MatchableVisitor;
 
 #[cfg(feature = "serde")]
@@ -197,10 +197,10 @@ impl<'de> Visitor<'de> for MatchableVisitor {
     }
 }
 
+#[derive(Clone, Debug)]
 /// This `RegexOnly` is just a wrapper of [`Regex`](regex::Regex).
 /// Unlike [`Matchable`], this `RegExp` treats the whole string as a regular expression,
 /// while [`Matchable`] only treats it as regular expression when it's enclosed by `/`.
-#[derive(Clone, Debug)]
 pub struct RegexOnly(Regex);
 
 impl Deref for RegexOnly {
@@ -221,8 +221,8 @@ impl<'de> Deserialize<'de> for RegexOnly {
     }
 }
 
-/// Serde visitor for parsing string as the [`RegexOnly`](RegexOnly) type.
 #[cfg(feature = "serde")]
+/// Serde visitor for parsing string as the [`RegexOnly`](RegexOnly) type.
 struct RegexOnlyVisitor;
 
 #[cfg(feature = "serde")]
