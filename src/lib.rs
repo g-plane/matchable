@@ -251,9 +251,23 @@ fn extract_regex(s: &str) -> Option<(&str, &str)> {
 #[cfg(feature = "serde")]
 fn build_regex(regex: &str, flags: &str) -> Result<Regex, regex::Error> {
     let mut builder = RegexBuilder::new(regex);
-    builder.case_insensitive(flags.contains('i'));
-    builder.multi_line(flags.contains('m'));
-    builder.dot_matches_new_line(flags.contains('s'));
+    for flag in flags.chars() {
+        match flag {
+            'i' => {
+                builder.case_insensitive(true);
+            }
+            'm' => {
+                builder.multi_line(true);
+            }
+            's' => {
+                builder.dot_matches_new_line(true);
+            }
+            'u' => {
+                builder.unicode(true);
+            }
+            _ => {}
+        }
+    }
     builder.build()
 }
 
